@@ -1,10 +1,16 @@
 <template>
   <v-btn
     :color="color"
-    v-text="textBtn"
-    @click="$emit('click', $event.target.value) && sayHi()"
+    :textBtn="textBtn"
+    @click="
+      $emit('click', $event.target.value);
+      sayHi();
+    "
     :to="to"
+    :disabled="disabled"
+    :loading="btnLoading"
   >
+    {{ textBtn }}
   </v-btn>
 </template>
 
@@ -24,12 +30,31 @@ export default {
     to: {
       type: String,
     },
+
+    disabled: {
+      type: Boolean,
+    },
+  },
+
+  data() {
+    return {
+      btnLoading: false,
+    };
   },
 
   methods: {
     sayHi() {
       console.log("Oiii !!!");
     },
+  },
+
+  created() {
+    this.$root.$on("btnLoading::show", () => {
+      this.btnLoading = true;
+    });
+    this.$root.$on("btnLoading::hide", () => {
+      this.btnLoading = false;
+    });
   },
 };
 </script>
